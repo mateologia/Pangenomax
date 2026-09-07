@@ -66,7 +66,6 @@
       overflow-y: auto;
     }
 
-    /* Custom Scrollbar */
     .container::-webkit-scrollbar {
       width: 8px;
     }
@@ -164,7 +163,6 @@
       box-shadow: 0 4px 14px rgba(240, 136, 62, 0.4);
     }
 
-    /* HUD e Timer */
     .hud {
       display: flex;
       justify-content: space-between;
@@ -320,7 +318,6 @@
       margin-left: auto;
     }
 
-    /* Resultados e Relatório de Erros */
     .results-content {
       text-align: center;
       padding: 10px 0;
@@ -402,7 +399,6 @@
   <canvas id="bgCanvas"></canvas>
 
   <main class="container">
-    <!-- MENU PRINCIPAL -->
     <section id="screen-menu" class="screen active">
       <h1 class="brand-title">Pangenomax</h1>
       <p class="subtitle">Plataforma Interativa de Fixação em Genômica e Bioinformática</p>
@@ -413,7 +409,6 @@
       </div>
     </section>
 
-    <!-- TELA DE QUIZ -->
     <section id="screen-quiz" class="screen">
       <div class="hud">
         <span class="hud-badge" id="hud-mode">Modo</span>
@@ -437,7 +432,6 @@
       <button class="btn btn-next" id="btn-next" onclick="nextQuestion()">Próxima Questão →</button>
     </section>
 
-    <!-- RESULTADOS COM PAINEL DE ERROS -->
     <section id="screen-results" class="screen">
       <div class="results-content">
         <h2 style="color: var(--text-bright); margin-bottom: 8px;">Desafio Concluído!</h2>
@@ -445,7 +439,6 @@
         <div class="score-subtitle" id="final-correctness">0 / 0 acertos</div>
         <p id="final-message" style="margin-bottom: 24px; color: #8b949e; line-height: 1.5;"></p>
 
-        <!-- Container dinâmico com a lista de erros -->
         <div id="review-area" class="review-container" style="display: none;">
           <h3 class="review-title">⚠️ Questões para Revisão Conceitual</h3>
           <div id="review-list"></div>
@@ -461,7 +454,6 @@
        1. ILUSTRAÇÕES VETORIAIS (SVGs)
        ========================================================================== */
     const graphics = {
-      // SVGs - Modo 1: Introdução
       miller: `
         <svg width="420" height="95" viewBox="0 0 420 95">
           <circle cx="70" cy="50" r="30" fill="none" stroke="#58a6ff" stroke-width="2"/>
@@ -554,8 +546,6 @@
           <text x="205" y="60" fill="#f85149" font-size="9" text-anchor="middle">sgRNA guia</text>
           <text x="320" y="24" fill="#e3b341" font-size="9">Corte sítio-específico</text>
         </svg>`,
-
-      // SVGs - Modo 2: Estrutura e Organização
       cellular: `
         <svg width="460" height="90" viewBox="0 0 460 90">
           <rect x="20" y="20" width="180" height="55" rx="8" fill="#1f242c" stroke="#3fb950" stroke-width="2"/>
@@ -612,8 +602,6 @@
           <path d="M 80 48 C 130 90, 210 90, 260 48 C 260 20, 200 10, 160 18 C 120 25, 90 35, 80 48" fill="none" stroke="#58a6ff" stroke-width="5"/>
           <text x="170" y="80" fill="#8b949e" font-size="10" text-anchor="middle">~147 pb de DNA superenrolado</text>
         </svg>`,
-
-      // SVGs - Modo 3: Ferramentas
       ddntp: `
         <svg width="400" height="90" viewBox="0 0 400 90">
           <polygon points="60,20 100,20 115,50 80,75 45,50" fill="#1f6feb" opacity="0.3"/>
@@ -1620,18 +1608,32 @@
     };
 
     /* ==========================================================================
-       3. LÓGICA DO JOGO, REGISTRO DE ERROS E TIMER
+       3. LÓGICA DO JOGO: EMBARALHAMENTO DE ALTERNATIVAS, TIMER E ESTADO
        ========================================================================== */
     let currentQuestions = [];
     let currentModeTitle = '';
     let currentQuestionIndex = 0;
     let score = 0;
     let correctCount = 0;
-    let wrongQuestions = []; // Armazena os erros da rodada atual
+    let wrongQuestions = [];
+
+    // Mapeamento dinâmico da questão atual após embaralhar
+    let activeShuffledOptions = [];
+    let activeCorrectIndex = -1;
 
     const QUESTION_TIME_LIMIT = 60;
     let timeLeft = QUESTION_TIME_LIMIT;
     let timerInterval = null;
+
+    // Algoritmo Fisher-Yates de Embaralhamento
+    function shuffleArray(array) {
+      const arr = [...array];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
 
     function startQuiz(modeKey) {
       if (modeKey === 'intro') {
@@ -1706,18 +1708,17 @@
       const feedback = document.getElementById('feedback');
 
       buttons.forEach(btn => btn.disabled = true);
-      buttons[qData.answer].classList.add('correct');
+      buttons[activeCorrectIndex].classList.add('correct');
 
-      // Registra como erro por tempo esgotado
       wrongQuestions.push({
         question: qData.q,
-        userAnswer: "Tempo Esgotado (Nenhuma alternativa selecionada)",
-        correctAnswer: qData.options[qData.answer],
+        userAnswer: "Tempo Esgotado (Nenhuma selecionada)",
+        correctAnswer: activeShuffledOptions[activeCorrectIndex],
         explanation: qData.explanation
       });
 
       feedback.className = 'feedback-box wrong';
-      feedback.innerHTML = `<strong>Tempo Esgotado! ⏱</strong> A resposta correta era: "${qData.options[qData.answer]}". ${qData.explanation}`;
+      feedback.innerHTML = `<strong>Tempo Esgotado! ⏱</strong> A resposta correta era: "${activeShuffledOptions[activeCorrectIndex]}". ${qData.explanation}`;
 
       document.getElementById('btn-next').style.display = 'block';
     }
@@ -1728,6 +1729,7 @@
       document.getElementById('hud-score').innerText = `Pontos: ${score}`;
       document.getElementById('question-text').innerText = qData.q;
 
+      // Imagem didática vetorial
       const visualWrapper = document.getElementById('visual-wrapper');
       const visualGraphic = document.getElementById('visual-graphic');
       const visualCaption = document.getElementById('visual-caption');
@@ -1741,6 +1743,11 @@
         visualGraphic.innerHTML = '';
       }
 
+      // Embaralhamento randômico de alternativas com mapeamento da resposta correta
+      const correctText = qData.options[qData.answer];
+      activeShuffledOptions = shuffleArray(qData.options);
+      activeCorrectIndex = activeShuffledOptions.indexOf(correctText);
+
       const optContainer = document.getElementById('options-container');
       optContainer.innerHTML = '';
 
@@ -1750,7 +1757,7 @@
 
       document.getElementById('btn-next').style.display = 'none';
 
-      qData.options.forEach((optText, idx) => {
+      activeShuffledOptions.forEach((optText, idx) => {
         const btn = document.createElement('button');
         btn.className = 'opt-btn';
         btn.innerText = optText;
@@ -1769,7 +1776,7 @@
 
       buttons.forEach(btn => btn.disabled = true);
 
-      if (selectedIdx === qData.answer) {
+      if (selectedIdx === activeCorrectIndex) {
         const speedBonus = timeLeft * 2;
         const roundScore = 100 + speedBonus;
         score += roundScore;
@@ -1779,16 +1786,15 @@
         feedback.className = 'feedback-box correct';
         feedback.innerHTML = `<strong>Correto! (+${roundScore} pts)</strong> [Base: 100 + Velocidade: ${speedBonus} pts em ${QUESTION_TIME_LIMIT - timeLeft}s]. ${qData.explanation}`;
       } else {
-        // Registra o erro para revisão posterior
         wrongQuestions.push({
           question: qData.q,
-          userAnswer: qData.options[selectedIdx],
-          correctAnswer: qData.options[qData.answer],
+          userAnswer: activeShuffledOptions[selectedIdx],
+          correctAnswer: activeShuffledOptions[activeCorrectIndex],
           explanation: qData.explanation
         });
 
         buttons[selectedIdx].classList.add('wrong');
-        buttons[qData.answer].classList.add('correct');
+        buttons[activeCorrectIndex].classList.add('correct');
         feedback.className = 'feedback-box wrong';
         feedback.innerHTML = `<strong>Incorreto! (0 pts)</strong> ${qData.explanation}`;
       }
@@ -1815,17 +1821,17 @@
       const ratio = correctCount / currentQuestions.length;
       let msg = '';
       if (ratio === 1) {
-        msg = "Desempenho Genômico Perfeito! Você acertou todas as questões deste módulo com excelente velocidade!";
+        msg = "Desempenho Genômico Perfeito! Você acertou todas as questões deste módulo com máxima agilidade!";
       } else if (ratio >= 0.7) {
-        msg = "Excelente aproveitamento! Seu domínio dos conceitos moleculares e analíticos está muito bem consolidado.";
+        msg = "Excelente aproveitamento! Seu domínio conceitual e analítico está amplamente consolidado.";
       } else if (ratio >= 0.5) {
-        msg = "Bom desempenho! Confira os pontos de revisão abaixo para reforçar os tópicos onde houve dúvida.";
+        msg = "Bom desempenho! Veja o painel de erros abaixo para reforçar os pontos onde ainda houve dúvida.";
       } else {
-        msg = "Revise as justificativas conceituais abaixo para fixar os conteúdos e tente uma nova rodada!";
+        msg = "Aproveite a revisão abaixo para fixar os conceitos e tente uma nova rodada!";
       }
       document.getElementById('final-message').innerText = msg;
 
-      // Renderização da lista de revisão de erros
+      // Painel de revisão de questões incorretas
       const reviewArea = document.getElementById('review-area');
       const reviewList = document.getElementById('review-list');
       reviewList.innerHTML = '';

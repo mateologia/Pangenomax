@@ -399,7 +399,6 @@
   <canvas id="bgCanvas"></canvas>
 
   <main class="container">
-    <!-- MENU PRINCIPAL -->
     <section id="screen-menu" class="screen active">
       <h1 class="brand-title">Pangenomax</h1>
       <p class="subtitle">Plataforma Interativa de Fixação em Genômica e Bioinformática</p>
@@ -410,7 +409,6 @@
       </div>
     </section>
 
-    <!-- TELA DE QUIZ -->
     <section id="screen-quiz" class="screen">
       <div class="hud">
         <span class="hud-badge" id="hud-mode">Modo</span>
@@ -434,7 +432,6 @@
       <button class="btn btn-next" id="btn-next" onclick="nextQuestion()">Próxima Questão →</button>
     </section>
 
-    <!-- RESULTADOS COM PAINEL DE ERROS -->
     <section id="screen-results" class="screen">
       <div class="results-content">
         <h2 style="color: var(--text-bright); margin-bottom: 8px;">Desafio Concluído!</h2>
@@ -457,6 +454,7 @@
        1. ILUSTRAÇÕES VETORIAIS (SVGs)
        ========================================================================== */
     const graphics = {
+      // SVGs - Modo 1: Introdução
       miller: `
         <svg width="420" height="95" viewBox="0 0 420 95">
           <circle cx="70" cy="50" r="30" fill="none" stroke="#58a6ff" stroke-width="2"/>
@@ -485,6 +483,164 @@
           <rect x="340" y="28" width="100" height="32" rx="6" fill="#238636" opacity="0.3" stroke="#3fb950" stroke-width="1.5"/>
           <text x="390" y="48" fill="#3fb950" font-size="12" font-weight="bold" text-anchor="middle">Proteína</text>
         </svg>`,
+      coacervate: `
+        <svg width="400" height="85" viewBox="0 0 400 85">
+          <circle cx="100" cy="42" r="34" fill="#d29922" opacity="0.25" stroke="#d29922" stroke-width="2" stroke-dasharray="3,3"/>
+          <circle cx="85" cy="35" r="7" fill="#58a6ff"/>
+          <circle cx="110" cy="45" r="9" fill="#bc8cff"/>
+          <circle cx="95" cy="55" r="6" fill="#3fb950"/>
+          <text x="100" y="82" fill="#d29922" font-size="10" text-anchor="middle">Gotícula de Coacervado</text>
+          <path d="M 145 42 L 235 42" stroke="#8b949e" stroke-width="2"/>
+          <text x="190" y="34" fill="#8b949e" font-size="9" text-anchor="middle">Troca Química</text>
+          <text x="310" y="38" fill="#58a6ff" font-size="11" font-weight="bold" text-anchor="middle">Sopa Pré-biótica</text>
+          <text x="310" y="52" fill="#8b949e" font-size="9" text-anchor="middle">Sais, Íons e Monômeros</text>
+        </svg>`,
+      levene: `
+        <svg width="440" height="85" viewBox="0 0 440 85">
+          <circle cx="65" cy="42" r="22" fill="#e3b341" opacity="0.3" stroke="#e3b341" stroke-width="1.5"/>
+          <text x="65" y="46" fill="#e3b341" font-size="10" font-weight="bold" text-anchor="middle">Fosfato</text>
+          <line x1="87" y1="42" x2="140" y2="42" stroke="#8b949e" stroke-width="2"/>
+          <polygon points="175,20 205,32 195,65 155,65 145,32" fill="#58a6ff" opacity="0.3" stroke="#58a6ff" stroke-width="1.5"/>
+          <text x="175" y="48" fill="#58a6ff" font-size="9" font-weight="bold" text-anchor="middle">Açúcar</text>
+          <line x1="205" y1="35" x2="260" y2="35" stroke="#8b949e" stroke-width="2"/>
+          <rect x="260" y="20" width="130" height="36" rx="4" fill="#238636" opacity="0.3" stroke="#3fb950" stroke-width="1.5"/>
+          <text x="325" y="42" fill="#3fb950" font-size="10" font-weight="bold" text-anchor="middle">Base Nitrogenada</text>
+        </svg>`,
+      griffith: `
+        <svg width="440" height="85" viewBox="0 0 440 85">
+          <circle cx="60" cy="35" r="14" fill="#f85149" stroke="#f85149" stroke-width="2"/>
+          <text x="60" y="65" fill="#f85149" font-size="9" text-anchor="middle">S morta (calor)</text>
+          <text x="120" y="40" fill="#8b949e" font-size="14" text-anchor="middle">+</text>
+          <circle cx="170" cy="35" r="14" fill="#3fb950" stroke="#3fb950" stroke-width="2"/>
+          <text x="170" y="65" fill="#3fb950" font-size="9" text-anchor="middle">R viva (não letal)</text>
+          <text x="230" y="40" fill="#8b949e" font-size="14" text-anchor="middle">→</text>
+          <circle cx="290" cy="35" r="15" fill="#f85149"/>
+          <text x="350" y="32" fill="#f85149" font-size="10" font-weight="bold">Transformação!</text>
+          <text x="350" y="48" fill="#8b949e" font-size="9">Camundongo morre</text>
+        </svg>`,
+      hershey: `
+        <svg width="440" height="85" viewBox="0 0 440 85">
+          <polygon points="50,15 70,25 70,45 50,55 30,45 30,25" fill="none" stroke="#58a6ff" stroke-width="2"/>
+          <circle cx="50" cy="35" r="6" fill="#f85149"/>
+          <line x1="50" y1="55" x2="50" y2="70" stroke="#58a6ff" stroke-width="2"/>
+          <text x="50" y="82" fill="#8b949e" font-size="8" text-anchor="middle">Fago T2</text>
+          <text x="110" y="30" fill="#bc8cff" font-size="10">³⁵S: Capsídeo proteico (fora)</text>
+          <text x="110" y="52" fill="#f85149" font-size="10" font-weight="bold">³²P: DNA injetado (dentro)</text>
+          <text x="320" y="42" fill="#3fb950" font-size="10" text-anchor="middle">DNA = Material Genético</text>
+        </svg>`,
+      helix: `
+        <svg width="380" height="85" viewBox="0 0 380 85">
+          <path d="M 40 15 Q 90 70, 140 15 T 240 15 T 340 15" fill="none" stroke="#58a6ff" stroke-width="3"/>
+          <path d="M 40 70 Q 90 15, 140 70 T 240 70 T 340 70" fill="none" stroke="#bc8cff" stroke-width="3"/>
+          <line x1="90" y1="35" x2="90" y2="50" stroke="#3fb950" stroke-width="2"/>
+          <line x1="190" y1="35" x2="190" y2="50" stroke="#f0883e" stroke-width="2"/>
+          <line x1="290" y1="35" x2="290" y2="50" stroke="#3fb950" stroke-width="2"/>
+          <text x="190" y="82" fill="#8b949e" font-size="10" text-anchor="middle">Dupla Hélice com Pareamento Complementar (Watson, Crick, Franklin)</text>
+        </svg>`,
+      crispr: `
+        <svg width="440" height="85" viewBox="0 0 440 85">
+          <line x1="30" y1="35" x2="410" y2="35" stroke="#58a6ff" stroke-width="3"/>
+          <line x1="30" y1="50" x2="410" y2="50" stroke="#58a6ff" stroke-width="3"/>
+          <rect x="140" y="15" width="130" height="55" rx="12" fill="#238636" opacity="0.35" stroke="#3fb950" stroke-width="2"/>
+          <text x="205" y="32" fill="#3fb950" font-size="11" font-weight="bold" text-anchor="middle">Cas9 (Nuclease)</text>
+          <path d="M 160 42 Q 190 60, 220 42" stroke="#f85149" stroke-width="2" fill="none"/>
+          <text x="205" y="60" fill="#f85149" font-size="9" text-anchor="middle">sgRNA guia</text>
+          <text x="320" y="24" fill="#e3b341" font-size="9">Corte sítio-específico</text>
+        </svg>`,
+
+      // SVGs - Modo 2: Estrutura e Organização
+      cellular: `
+        <svg width="460" height="90" viewBox="0 0 460 90">
+          <rect x="20" y="20" width="180" height="55" rx="8" fill="#1f242c" stroke="#3fb950" stroke-width="2"/>
+          <text x="110" y="40" fill="#3fb950" font-size="11" font-weight="bold" text-anchor="middle">Procarioto</text>
+          <text x="110" y="58" fill="#8b949e" font-size="10" text-anchor="middle">Nucleoide (sem membrana)</text>
+          <rect x="260" y="15" width="180" height="65" rx="12" fill="#1f242c" stroke="#58a6ff" stroke-width="2"/>
+          <circle cx="350" cy="48" r="20" fill="#21262d" stroke="#58a6ff" stroke-dasharray="2,2"/>
+          <text x="350" y="44" fill="#58a6ff" font-size="11" font-weight="bold" text-anchor="middle">Eucarioto</text>
+          <text x="350" y="60" fill="#8b949e" font-size="9" text-anchor="middle">Núcleo + Organelas</text>
+        </svg>`,
+      gene_def: `
+        <svg width="460" height="75" viewBox="0 0 460 75">
+          <rect x="40" y="25" width="140" height="26" fill="#316dca" rx="4"/>
+          <text x="110" y="42" fill="#fff" font-size="11" text-anchor="middle">Gene (DNA)</text>
+          <path d="M 190 38 L 240 38" stroke="#8b949e" stroke-width="2"/>
+          <rect x="250" y="12" width="170" height="22" fill="#2ea043" rx="4"/>
+          <text x="335" y="27" fill="#fff" font-size="10" text-anchor="middle">Polipeptídeo (Proteína)</text>
+          <rect x="250" y="42" width="170" height="22" fill="#bc8cff" rx="4"/>
+          <text x="335" y="57" fill="#fff" font-size="10" text-anchor="middle">RNA Estável (rRNA, tRNA)</text>
+        </svg>`,
+      operon: `
+        <svg width="480" height="85" viewBox="0 0 480 85">
+          <rect x="10" y="30" width="60" height="26" fill="#3fb950" rx="4"/>
+          <text x="40" y="47" fill="#fff" font-size="11" text-anchor="middle" font-weight="bold">Promotor</text>
+          <rect x="75" y="30" width="55" height="26" fill="#d29922" rx="4"/>
+          <text x="102" y="47" fill="#fff" font-size="11" text-anchor="middle" font-weight="bold">Operador</text>
+          <rect x="135" y="26" width="90" height="34" fill="#58a6ff" rx="4"/>
+          <text x="180" y="47" fill="#fff" font-size="12" text-anchor="middle" font-weight="bold">Cístron A</text>
+          <rect x="230" y="26" width="90" height="34" fill="#1f6feb" rx="4"/>
+          <text x="275" y="47" fill="#fff" font-size="12" text-anchor="middle" font-weight="bold">Cístron B</text>
+          <rect x="325" y="26" width="90" height="34" fill="#bc8cff" rx="4"/>
+          <text x="370" y="47" fill="#fff" font-size="12" text-anchor="middle" font-weight="bold">Cístron C</text>
+          <rect x="420" y="30" width="50" height="26" fill="#f85149" rx="4"/>
+          <text x="445" y="47" fill="#fff" font-size="10" text-anchor="middle" font-weight="bold">Term</text>
+        </svg>`,
+      splicing: `
+        <svg width="490" height="90" viewBox="0 0 490 90">
+          <text x="10" y="22" fill="#8b949e" font-size="11">Pré-mRNA:</text>
+          <rect x="80" y="10" width="50" height="20" fill="#58a6ff" rx="3"/><text x="105" y="24" fill="#fff" font-size="10" text-anchor="middle">Éxon 1</text>
+          <line x1="130" y1="20" x2="175" y2="20" stroke="#8b949e" stroke-dasharray="3,3" stroke-width="2"/>
+          <rect x="175" y="10" width="50" height="20" fill="#3fb950" rx="3"/><text x="200" y="24" fill="#fff" font-size="10" text-anchor="middle">Éxon 2</text>
+          <line x1="225" y1="20" x2="270" y2="20" stroke="#8b949e" stroke-dasharray="3,3" stroke-width="2"/>
+          <rect x="270" y="10" width="50" height="20" fill="#f0883e" rx="3"/><text x="295" y="24" fill="#fff" font-size="10" text-anchor="middle">Éxon 3</text>
+          <text x="10" y="65" fill="#8b949e" font-size="11">mRNA Final:</text>
+          <rect x="80" y="55" width="50" height="20" fill="#58a6ff" rx="3"/><text x="105" y="69" fill="#fff" font-size="10" text-anchor="middle">Éxon 1</text>
+          <rect x="130" y="55" width="50" height="20" fill="#f0883e" rx="3"/><text x="155" y="69" fill="#fff" font-size="10" text-anchor="middle">Éxon 3</text>
+          <text x="200" y="69" fill="#7ee787" font-size="11">Isoforma sem Éxon 2 (Splicing Alternativo)</text>
+        </svg>`,
+      nucleosome: `
+        <svg width="340" height="85" viewBox="0 0 340 85">
+          <circle cx="170" cy="42" r="30" fill="#d29922"/>
+          <text x="170" y="40" fill="#fff" font-size="10" text-anchor="middle" font-weight="bold">Octâmero</text>
+          <text x="170" y="52" fill="#fff" font-size="9" text-anchor="middle">de Histonas</text>
+          <path d="M 80 48 C 130 90, 210 90, 260 48 C 260 20, 200 10, 160 18 C 120 25, 90 35, 80 48" fill="none" stroke="#58a6ff" stroke-width="5"/>
+          <text x="170" y="80" fill="#8b949e" font-size="10" text-anchor="middle">~147 pb de DNA superenrolado</text>
+        </svg>`,
+      homology: `
+        <svg width="460" height="85" viewBox="0 0 460 85">
+          <rect x="180" y="6" width="100" height="22" fill="#bc8cff" rx="4"/>
+          <text x="230" y="21" fill="#fff" font-size="11" text-anchor="middle">Gene Ancestral</text>
+          <path d="M 210 30 L 130 52" stroke="#8b949e" stroke-width="2"/>
+          <path d="M 250 30 L 330 52" stroke="#8b949e" stroke-width="2"/>
+          <rect x="70" y="54" width="120" height="24" fill="#3fb950" rx="4"/>
+          <text x="130" y="70" fill="#fff" font-size="10" text-anchor="middle">Cópia A (Espécie 1)</text>
+          <rect x="270" y="54" width="120" height="24" fill="#3fb950" rx="4"/>
+          <text x="330" y="70" fill="#fff" font-size="10" text-anchor="middle">Cópia B (Espécie 2)</text>
+          <text x="230" y="48" fill="#58a6ff" font-size="10" text-anchor="middle">Especiação = Ortólogos</text>
+        </svg>`,
+      piechart: `
+        <svg width="280" height="85" viewBox="0 0 280 85">
+          <circle cx="50" cy="42" r="32" fill="#30363d"/>
+          <path d="M 50 42 L 50 10 A 32 32 0 0 1 54 10 Z" fill="#f85149" stroke="#f85149" stroke-width="2"/>
+          <text x="100" y="30" fill="#f85149" font-size="12" font-weight="bold">Éxons: ~1% a 1.5%</text>
+          <text x="100" y="50" fill="#8b949e" font-size="11">Íntrons: ~24%</text>
+          <text x="100" y="68" fill="#8b949e" font-size="11">Transposons / Repetições: >50%</text>
+        </svg>`,
+      mtdna: `
+        <svg width="300" height="85" viewBox="0 0 300 85">
+          <circle cx="150" cy="42" r="30" fill="none" stroke="#f0883e" stroke-width="4"/>
+          <text x="150" y="38" fill="#fff" font-size="10" font-weight="bold" text-anchor="middle">mtDNA Humano</text>
+          <text x="150" y="52" fill="#8b949e" font-size="9" text-anchor="middle">16.569 pb | Circular</text>
+        </svg>`,
+      virion: `
+        <svg width="340" height="85" viewBox="0 0 340 85">
+          <polygon points="60,15 90,30 90,65 60,80 30,65 30,30" fill="none" stroke="#58a6ff" stroke-width="2"/>
+          <circle cx="60" cy="47" r="12" fill="#f85149"/>
+          <text x="60" y="50" fill="#fff" font-size="8" text-anchor="middle">Genoma</text>
+          <text x="115" y="48" fill="#58a6ff" font-size="11">Capsídeo Proteico</text>
+          <text x="210" y="48" fill="#8b949e" font-size="11">+ Envelope (opcional)</text>
+        </svg>`,
+
+      // SVGs - Modo 3: Ferramentas
       workflow: `
         <svg width="490" height="85" viewBox="0 0 490 85">
           <rect x="10" y="25" width="80" height="34" rx="4" fill="#1f6feb" opacity="0.3" stroke="#58a6ff" stroke-width="1.5"/>
@@ -605,7 +761,7 @@
     };
 
     /* ==========================================================================
-       2. BANCO DE QUESTÕES
+       2. BANCO DE QUESTÕES COMPLETO (TODAS AS QUESTÕES DOS SLIDES)
        ========================================================================== */
     const questionDatabase = {
       intro: [
@@ -680,12 +836,255 @@
           ],
           answer: 2,
           explanation: "A Genômica abrange a análise e manipulação global de genomas inteiros, integrando sequenciamento, bioinformática e estudos evolutivos[cite: 1]."
+        },
+        {
+          q: "Qual foi a contribuição fundamental de Gregor Mendel (1866) para a genética?",
+          options: [
+            "Determinação da estrutura de dupla-hélice",
+            "Descoberta dos princípios da hereditariedade e segregação dos fatores em ervilhas",
+            "Isolamento da nucleína a partir de glóbulos brancos",
+            "Criação da técnica de amplificação por PCR"
+          ],
+          answer: 1,
+          explanation: "Mendel estabeleceu as bases quantitativas da hereditariedade através de cruzamentos controlados com ervilhas (*Pisum sativum*)[cite: 1]."
+        },
+        {
+          q: "Friedrich Miescher (1869) é historicamente notável na biologia molecular por:",
+          options: [
+            "Sequenciar o genoma da bactéria Haemophilus influenzae",
+            "Realizar o primeiro isolamento de DNA a partir de leucócitos de curativos cirúrgicos",
+            "Propor o modelo cristalográfico de difração de raios X",
+            "Descobrir que a adenina se pareia com a timina"
+          ],
+          answer: 1,
+          explanation: "Miescher isolou uma substância fosfatada a partir do núcleo de leucócitos de pus em ataduras cirúrgicas, chamando-a de 'nucleína'[cite: 1]."
+        },
+        {
+          q: "Phoebus Levene (1919) elucidou qual importante aspecto da composição dos ácidos nucleicos?",
+          visual: 'levene',
+          caption: 'Organização estrutural dos componentes de um nucleotídeo proposta por Levene',
+          options: [
+            "A composição dos nucleotídeos em base, açúcar e fosfato e a identificação de ribose/desoxirribose",
+            "A rota de clonagem do gene da insulina humana",
+            "A técnica de edição gênica por Cas9",
+            "A indução de pluripotência celular em fibroblastos"
+          ],
+          answer: 0,
+          explanation: "Levene descreveu as subunidades de nucleotídeo (base + pentose + fosfato) e caracterizou a ribose e a desoxirribose[cite: 1]."
+        },
+        {
+          q: "O experimento de Frederick Griffith (1928) com Streptococcus pneumoniae em camundongos revelou o:",
+          visual: 'griffith',
+          caption: 'O experimento do Princípio Transformante de Frederick Griffith (1928)',
+          options: [
+            "Código genético em trincas de bases",
+            "'Princípio transformante', onde células R vivas adquiriram virulência da linhagem S morta",
+            "Padrão helicoidal da fibra de cromatina",
+            "Mecanismo de splicing alternativo"
+          ],
+          answer: 1,
+          explanation: "Griffith demonstrou a existência de um princípio genético capaz de transformar fenotipicamente bactérias não patogênicas em virulentas[cite: 1]."
+        },
+        {
+          q: "William Thomas Astbury (1937) foi pioneiro ao:",
+          options: [
+            "Obter os primeiros padrões de difração de raios X indicando a regularidade estrutural do DNA",
+            "Gerar o primeiro mamífero transgênico do mundo",
+            "Desenvolver oligonucleotídeos para reações de sequenciamento em gel",
+            "Sintetizar o primeiro RNA artificial em tubo de ensaio"
+          ],
+          answer: 0,
+          explanation: "Astbury realizou as primeiras difrações de raios X em fibras de DNA, comprovando sua periodicidade molecular regular[cite: 1]."
+        },
+        {
+          q: "Avery, MacLeod e McCarty (1944) avançaram nos achados de Griffith ao demonstrar que:",
+          options: [
+            "As proteínas eram o princípio transformante",
+            "Apenas o tratamento com desoxirribonuclease (DNase) impedia a transformação bacteriana",
+            "O RNA era a única molécula informacional ativa em procariotos",
+            "As enzimas proteolíticas inativavam o fator de virulência"
+          ],
+          answer: 1,
+          explanation: "Ao tratar o extrato com enzimas específicas, provaram que a destruição do DNA bloqueava a transformação da linhagem R em virulenta[cite: 1]."
+        },
+        {
+          q: "O que Alfred Hershey e Martha Chase (1952) comprovaram usando fagos marcados com ³⁵S e ³²P?",
+          visual: 'hershey',
+          caption: 'Marcação diferencial de proteínas e ácidos nucleicos no experimento de Hershey-Chase',
+          options: [
+            "Que o material genético viral injetado na bactéria era o DNA (³²P), não as proteínas (³⁵S)",
+            "Que o envoltório proteico se duplicava autonomamente no citoplasma",
+            "Que o enxofre radioativo era transferido para a progênie fágica",
+            "Que as bactérias não possuíam receptores de superfície específicos"
+          ],
+          answer: 0,
+          explanation: "O fósforo-32 (presente no DNA viral) penetrou na bactéria para guiar a síntese de novos fagos, confirmando que o DNA é o material genético[cite: 1]."
+        },
+        {
+          q: "Watson, Crick, Franklin e Wilkins (1953) consolidaram um marco histórico ao desvendar:",
+          visual: 'helix',
+          caption: 'Estrutura da dupla hélice com fitas antiparalelas e pontes de hidrogênio',
+          options: [
+            "O mecanismo de recombinação gênica por plasmídeos",
+            "A estrutura em dupla hélice tridimensional e o pareamento complementar das bases do DNA",
+            "O sequenciamento completo do genoma do bacteriófago MS2",
+            "A reprogramação de células adultas em células-tronco pluripotentes"
+          ],
+          answer: 1,
+          explanation: "Com base nas imagens de difração de Franklin e Wilkins, Watson e Crick modelaram a dupla-fita de DNA unida por pontes de hidrogênio complementares[cite: 1]."
+        },
+        {
+          q: "Arthur Kornberg (1957) alcançou notoriedade científica ao:",
+          options: [
+            "Isolar a enzima DNA polimerase I e sintetizar DNA in vitro",
+            "Decifrar a tabela completa dos 64 códons de aminoácidos",
+            "Descobrir os elementos genéticos móveis do milho",
+            "Criar a ovelha Dolly por transferência de núcleo somático"
+          ],
+          answer: 0,
+          explanation: "Kornberg purificou a primeira DNA polimerase e sintetizou DNA em tubo de ensaio[cite: 1]."
+        },
+        {
+          q: "Qual foi o feito de Frederick Sanger que lhe rendeu seu primeiro Prêmio Nobel em 1958?",
+          options: [
+            "A determinação da sequência completa de aminoácidos de uma proteína (insulina)",
+            "O sequenciamento de genomas bacterianos com terminadores fluorescentes",
+            "A descoberta dos príons patogênicos",
+            "A clonagem do hormônio do crescimento humano em vetores virais"
+          ],
+          answer: 0,
+          explanation: "Sanger decifrou a sequência de aminoácidos da insulina bovina, mostrando a linearidade e exatidão da ordem dos aminoácidos[cite: 1]."
+        },
+        {
+          q: "Marshall Nirenberg (1966) desvendou a base molecular da tradução ao:",
+          options: [
+            "Decifrar a correspondência entre trincas de bases (códons de mRNA) e seus aminoácidos",
+            "Clonar a transcriptase reversa a partir de retrovírus",
+            "Isolar o primeiro cromossomo artificial de levedura",
+            "Identificar promotores TATA box em humanos"
+          ],
+          answer: 0,
+          explanation: "Usando fitas artificiais de RNA mensageiro em extratos acelulares, Nirenberg decifrou as trincas do código genético[cite: 1]."
+        },
+        {
+          q: "Water Fiers (1972) foi o primeiro pesquisador a:",
+          options: [
+            "Desenvolver uma linhagem de milho mutante com transposons",
+            "Sequenciar a estrutura de um gene completo (a proteína de capa do fago MS2)",
+            "Utilizar eletroforese capilar para montar genomas de mamíferos",
+            "Produzir um anticorpo monoclonal para imunoterapia"
+          ],
+          answer: 1,
+          explanation: "Walter Fiers e seu grupo determinaram a sequência de nucleotídeos de um gene codificante pela primeira vez na história (o fago de RNA MS2)[cite: 1]."
+        },
+        {
+          q: "Paul Berg (1972) inaugurou a engenharia genética moderna ao:",
+          options: [
+            "Unir fragmentos de DNA de fontes distintas utilizando enzimas de restrição (criação do primeiro DNA recombinante)",
+            "Inibir o amadurecimento precoce em tomates comerciais",
+            "Descobrir a enzima Taq polimerase de fontes termais",
+            "Realizar a clonagem nuclear de primatas"
+          ],
+          answer: 0,
+          explanation: "Berg utilizou enzimas de restrição para combinar DNA de vírus e fagos, criando a primeira molécula recombinante in vitro[cite: 1]."
+        },
+        {
+          q: "Em 1977, Frederick Sanger revolucionou a genômica molecular ao criar:",
+          options: [
+            "O método de sequenciamento enzimático por terminação de cadeia com dideoxinucleotídeos (ddNTPs)",
+            "O primeiro método de PCR com ciclos térmicos contínuos",
+            "As linhagens de recombinação sítio-específica Cre-Lox",
+            "A tecnologia de microarranjos de oligonucleotídeos"
+          ],
+          answer: 0,
+          explanation: "O método de terminação por dideoxinucleotídeos viabilizou a leitura rápida de fitas de DNA[cite: 1]."
+        },
+        {
+          q: "Palmiter e Brinster (1982) marcaram a biotecnologia animal ao desenvolver:",
+          options: [
+            "O primeiro camundongo transgênico (expressando o gene do hormônio de crescimento)",
+            "A linhagem de camundongos Knockout para p53",
+            "O primeiro teste sorológico rápido para HIV",
+            "A técnica de fertilização in vitro humana"
+          ],
+          answer: 0,
+          explanation: "Eles microinjetaram o gene do hormônio do crescimento sob controle do promotor de metalotioneína em zigotos de camundongo[cite: 1]."
+        },
+        {
+          q: "Barbara McClintock (Nobel em 1983) destacou-se pela pioneira identificação de:",
+          options: [
+            "Elementos genéticos transponíveis ('genes saltadores') no genoma do milho",
+            "Metilação epigenética de ilhas CpG",
+            "Mutações pontuais induzidas por agentes alquilantes",
+            "A fita molde contínua de telômeros em plantas"
+          ],
+          answer: 0,
+          explanation: "McClintock descobriu que certos fragmentos genéticos mudavam de posição nos cromossomos de milho, alterando sua expressão fenotípica[cite: 1]."
+        },
+        {
+          q: "Kary Mullis (1985) foi laureado com o Prêmio Nobel pela invenção da:",
+          options: [
+            "Reação em Cadeia da Polimerase (PCR), viabilizando a amplificação exponencial in vitro de DNA",
+            "Tecnologia de sequenciamento em tempo real de molécula única",
+            "Microinjeção intracitoplasmática de espermatozoides",
+            "Transformação bacteriana química por choque térmico"
+          ],
+          answer: 0,
+          explanation: "A reação em cadeia da polimerase tornou viável amplificar milhões de cópias de alvos genéticos a partir de ciclos controlados de temperatura[cite: 1]."
+        },
+        {
+          q: "Hamilton Othanel Smith e colaboradores (1995) obtiveram um marco histórico ao:",
+          options: [
+            "Sequenciar o primeiro genoma completo de um organismo celular livre (a bactéria Haemophilus influenzae)",
+            "Identificar os genes de suscetibilidade BRCA1 no câncer de ovário",
+            "Sintetizar um cromossomo artificial completo de levedura",
+            "Catalogar todos os microRNAs reguladores humanos"
+          ],
+          answer: 0,
+          explanation: "H. influenzae foi o primeiro organismo livre a ter todo o seu cromossomo sequenciado e montado[cite: 1]."
+        },
+        {
+          q: "Shinya Yamanaka (2006, Nobel em 2012) realizou um avanço histórico ao:",
+          options: [
+            "Reprogramar células somáticas adultas em Células-Tronco Pluripotentes Induzidas (iPS) usando 4 fatores de transcrição",
+            "Descobrir a nuclease Cas9 em Streptococcus",
+            "Sequenciar genomas individuais em menos de 24 horas",
+            "Desenvolver os primeiros vetores adenoassociados"
+          ],
+          answer: 0,
+          explanation: "Yamanaka usou os fatores Oct3/4, Sox2, Klf4 e c-Myc para desdiferenciar células adultas até um estado celular pluripotente[cite: 1]."
+        },
+        {
+          q: "Jennifer Doudna e Emmanuelle Charpentier (2012, Nobel em 2020) revolucionaram a biologia ao desenvolver:",
+          visual: 'crispr',
+          caption: 'Sistema CRISPR-Cas9 guiado por sgRNA para clivagem precisa do DNA',
+          options: [
+            "A ferramenta programável de edição genômica CRISPR-Cas9 guiada por RNA",
+            "A clonagem por transferência nuclear de células somáticas",
+            "A metodologia de eletroforese capilar automatizada",
+            "O método de clonagem posicional de doenças genéticas"
+          ],
+          answer: 0,
+          explanation: "Doudna e Charpentier demonstraram que a Cas9 pode ser guiada por um RNA de fita única programável para clivar sequências alvos de DNA[cite: 1]."
+        },
+        {
+          q: "O pesquisador chinês He Jiankui (2018) gerou imensa controvérsia bioética internacional ao:",
+          options: [
+            "Editar o gene CCR5 em embriões humanos viáveis que nasceram, visando conferir resistência ao HIV",
+            "Patentear sequências completas do genoma humano sem autorização",
+            "Criar o primeiro clone de primata não-humano para testes farmacêuticos",
+            "Comercializar linhagens celulares modificadas contendo oncogenes letais"
+          ],
+          answer: 0,
+          explanation: "He Jiankui realizou edição germinativa não autorizada em embriões humanos para modificar o gene CCR5[cite: 1]."
         }
       ],
 
       estrutura: [
         {
           q: "Qual é a fronteira arquitetônica decisiva que separa os genomas procarióticos dos eucarióticos?",
+          visual: 'cellular',
+          caption: 'Arquitetura celular procariótica vs eucariótica',
           options: [
             "A presença de replicação semiconservativa exclusiva em procariotos",
             "A ausência de membrana nuclear e organelas em procariotos contra o núcleo compartimentalizado nos eucariotos",
@@ -694,6 +1093,41 @@
           ],
           answer: 1,
           explanation: "A fronteira decisiva é a organização celular: procariotos têm nucleoide sem membrana e sem organelas; eucariotos têm núcleo delimitado e organelas endomembranares com genomas próprios[cite: 2]."
+        },
+        {
+          q: "Do ponto de vista molecular funcional, qual é a definição correta de um 'gene'?",
+          visual: 'gene_def',
+          caption: 'Produtos possíveis da transcrição gênica',
+          options: [
+            "Qualquer sequência de DNA que codifica exclusivamente uma cadeia polipeptídica",
+            "Uma sequência de nucleotídeos necessária e suficiente para a síntese de um polipeptídeo ou de uma molécula estável de RNA (rRNA, tRNA)",
+            "Apenas o trecho contendo as regiões reguladoras promotoras e terminadoras",
+            "Todo segmento cromossômico que obrigatoriamente sofre splicing alternativo"
+          ],
+          answer: 1,
+          explanation: "Um gene é a sequência de nucleotídeos necessária e suficiente para gerar um produto funcional: um polipeptídeo ou uma molécula de RNA estável (como rRNA e tRNA)[cite: 2]."
+        },
+        {
+          q: "O que constitui o genoma de uma célula e qual a sua principal função biológica?",
+          options: [
+            "É o conjunto de todas as enzimas ativas no citosol, servindo como motor catalítico",
+            "A informação genética total (genes e demais elementos de DNA), atuando como repositório replicativo da informação",
+            "Apenas as sequências de RNA mensageiro expressas em um momento fisiológico específico",
+            "O complexo proteico nuclear responsável pelo empacotamento das histonas"
+          ],
+          answer: 1,
+          explanation: "O genoma engloba toda a informação genética celular (genes estruturais, regiões reguladoras e DNA intergênico/repetitivo), funcionando como o repositório replicativo da vida[cite: 2]."
+        },
+        {
+          q: "Na relação 'Genótipo x Fenótipo', como se define a interação com o ambiente?",
+          options: [
+            "O fenótipo é fixo e imutável pelo ambiente após a fertilização",
+            "Fenótipo = genótipo + ambiente: o mesmo genótipo pode produzir fenótipos diferentes em condições ambientais distintas",
+            "O fenótipo dita retroativamente a sequência de nucleotídeos do genótipo nuclear",
+            "Genótipo corresponde às características visíveis e fenótipo à constituição alélica"
+          ],
+          answer: 1,
+          explanation: "Genótipo é a constituição gênica; fenótipo são os traços observáveis. Fenótipo resulta da interação do genótipo com o meio (Fenótipo = Genótipo + Ambiente)[cite: 2]."
         },
         {
           q: "O Paradoxo do Valor C descreve uma observação clássica sobre o tamanho dos genomas. O que esse paradoxo evidencia?",
@@ -707,7 +1141,20 @@
           explanation: "O Paradoxo do Valor C demonstra que o tamanho do genoma não acompanha a complexidade morfofisiológica: salamandras e certas plantas possuem genomas dezenas de vezes maiores que o humano[cite: 2]."
         },
         {
+          q: "Durante a rápida divisão celular bacteriana a partir de uma única origem circular (oriC), observa-se o efeito de dosagem gênica porque:",
+          options: [
+            "Ocorre transposição contínua de elementos móveis em direção ao septo de divisão",
+            "Os plasmídeos se recombinam na terminação terC duplicando o número de operons",
+            "Novas rodadas de replicação iniciam-se em oriC antes do término da anterior, duplicando genes proximais",
+            "A DNA polimerase bacteriana desacelera na fita contínua em direção a terC"
+          ],
+          answer: 2,
+          explanation: "Em replicação acelerada, novas forquilhas partem de oriC antes que a divisão anterior acabe, mantendo temporariamente genes próximos a oriC em maior número de cópias do que os próximos a terC[cite: 2]."
+        },
+        {
           q: "Em genomas bacterianos, qual é a principal característica funcional da organização em óperons?",
+          visual: 'operon',
+          caption: 'Estrutura típica de um óperon procariótico',
           options: [
             "A remoção obrigatória de íntrons por spliceossomos antes do início da tradução",
             "A transcrição de múltiplos genes sob controle do mesmo promotor em um único mRNA policistrônico",
@@ -716,11 +1163,363 @@
           ],
           answer: 1,
           explanation: "Óperons organizam genes de vias metabólicas comuns sob o mesmo promotor, permitindo transcrição coordenada num único mRNA policistrônico[cite: 2]."
+        },
+        {
+          q: "O que caracteriza o 'acoplamento traducional' em transcritos policistrônicos procarióticos?",
+          options: [
+            "O ribossomo traduz apenas o último cístron do mRNA e degrada os anteriores",
+            "A tradução de um cístron proximal pelo ribossomo facilita e favorece a iniciação da tradução no cístron seguinte",
+            "Cada cístron necessita de um RNA transportador modificado com cauda poli-A",
+            "A tradução só se inicia após a clivagem química das regiões intercistrônicas por endonucleases"
+          ],
+          answer: 1,
+          explanation: "No acoplamento traducional, a proximidade física entre cístrons permite que ribossomos terminando a síntese de um polipeptídeo sejam recrutados quase que imediatamente para o sítio de Shine-Dalgarno seguinte[cite: 2]."
+        },
+        {
+          q: "Em bactérias e vírus com genomas compactos, a sobreposição de genes (overlapping genes):",
+          options: [
+            "Ocorre em ~27% dos genes bacterianos, compartilhando sequências na mesma fita ou em fitas opostas em fases de leitura distintas",
+            "É um erro genético letal que sempre provoca a parada imediata da polimerase",
+            "Exige a duplicação prévia de todo o nucleoide por transposases",
+            "Ocorre exclusivamente no sítio de ligação do peptídeo sinalizador"
+          ],
+          answer: 0,
+          explanation: "Genomas compactos usam sobreposição de fases de leitura (unidirecional, divergente ou convergente) para codificar múltiplos polipeptídeos a partir do mesmo trecho de DNA[cite: 2]."
+        },
+        {
+          q: "Como se caracterizam funcionalmente os elementos genéticos móveis?",
+          options: [
+            "Proteínas de membrana que transportam vesículas citoplasmáticas",
+            "Sequências de ácidos nucleicos capazes de mudar de posição no genoma ou de se transferir entre células",
+            "Cromossomos supernumerários que não participam da segregação celular",
+            "Polímeros estruturais de tubulina responsáveis pela divisão binária"
+          ],
+          answer: 1,
+          explanation: "Elementos genéticos móveis (transposons, plasmídeos, bacteriófagos) são fragmentos que possuem maquinaria ou sinais para se mover e reordenar informação genética[cite: 2]."
+        },
+        {
+          q: "Quais são as características moleculares típicas de plasmídeos bacterianos?",
+          options: [
+            "Moléculas lineares de RNA de fita simples com capsídeo icosaédrico",
+            "Moléculas de DNA de fita dupla geralmente circulares, extracromossômicas e de replicação autônoma",
+            "Fragmentos de histonas modificadas integradas ao nucleoide central",
+            "Vesículas lipídicas que armazenam ribossomos livres"
+          ],
+          answer: 1,
+          explanation: "Plasmídeos são replicons acessórios, com DNA fita dupla circular, conferindo vantagens adaptativas (como resistência a antibióticos ou fatores de virulência)[cite: 2]."
+        },
+        {
+          q: "Quais são os três mecanismos canônicos de transferência horizontal de genes (HGT) em procariotos?",
+          options: [
+            "Conjugação (contato célula-célula), transformação (DNA livre) e transdução (mediada por bacteriófagos)",
+            "Mitose assimétrica, meiose redutiva e fecundação externa",
+            "Splicing, capeamento e cauda poli-A",
+            "Crossover meiótico, translocação e fissão binária"
+          ],
+          answer: 0,
+          explanation: "HGT ocorre por transformação (absorção de fragmentos do meio), conjugação (transferência física via pilus) e transdução (vetorização acidental por bacteriófagos)[cite: 2]."
+        },
+        {
+          q: "Como se divide a organização estrutural do genoma nuclear eucariótico?",
+          options: [
+            "Apenas em DNA circular policistrônico sem qualquer sequência repetitiva",
+            "Em DNA de cópia única (genes, íntrons, regiões intergênicas) e DNA repetitivo (genes em tandem, famílias e sequências satélites)",
+            "Exclusivamente em ilhas de retrovírus inativos e ribozimas catalíticas",
+            "Em DNA de fita simples linear associado a proteossomos"
+          ],
+          answer: 1,
+          explanation: "O genoma eucariótico é dividido entre frações de cópia única (que incluem éxons funcionais e sequências reguladoras) e vastas porções de DNA repetitivo disperso ou em tandem[cite: 2]."
+        },
+        {
+          q: "Qual é a composição estrutural e a extensão de DNA associada à partícula central do nucleossomo?",
+          visual: 'nucleosome',
+          caption: 'Partícula elementar da cromatina',
+          options: [
+            "Cerca de 147 pb de DNA enrolados ao redor de um octâmero de proteínas histonas",
+            "Mais de 5.000 pb ancorados exclusivamente a moléculas de RNA polimerase",
+            "Uma sequência curta de 20 pb ligada a receptores de membrana nuclear",
+            "Filamentos de actinina conectados por pontes de enxofre"
+          ],
+          answer: 0,
+          explanation: "O nucleossomo consiste em ~147 pares de bases de DNA dando aproximadamente 1,65 voltas sobre o octâmero de histonas (duas cópias de H2A, H2B, H3 e H4)[cite: 2]."
+        },
+        {
+          q: "Na hierarquia de compactação do DNA eucariótico, qual é a sequência progressiva correta?",
+          options: [
+            "Cromossomo metafásico → Nucleossomo → DNA dupla hélice",
+            "Dupla hélice (2 nm) → 'Contas em colar' (11 nm) → Fibra de 30 nm → Alças/Scaffold (300-700 nm) → Cromossomo metafásico (1400 nm)",
+            "Fibra de 30 nm → Plasmídeo condensado → Nucleoide → Carioteca",
+            "Éxon → Transcrito primário → Spliceossomo → Cromômero"
+          ],
+          answer: 1,
+          explanation: "A cromatina se condensa partindo da fita nua (2 nm), passando pelo colar de nucleossomos (11 nm), fibras compactadas (30 nm), alças em arcabouço proteico até o nível máximo no cromossomo mitótico (1400 nm)[cite: 2]."
+        },
+        {
+          q: "O que caracteriza a poliploidia observada com frequência em genomas de plantas cultivadas, como o morango (Fragaria x ananassa)?",
+          options: [
+            "A perda total de cromossomos sexuais funcionais",
+            "A presença de múltiplos conjuntos cromossômicos completos (ex.: 8n = octaploide)",
+            "A substituição do DNA genômico por fita dupla circular bacteriana",
+            "A ausência de transcrição gênica por hipermetilação generalizada"
+          ],
+          answer: 1,
+          explanation: "Poliploidia é a posse de mais de dois conjuntos cromossômicos homólogos completos (como os 8 conjuntos cromossômicos presentes no morango octaploide)[cite: 2]."
+        },
+        {
+          q: "A descontinuidade da unidade transcricional em eucariotos caracteriza-se fundamentalmente por:",
+          options: [
+            "Genes divididos em éxons (regiões maduras) intercalados por íntrons (removidos durante o processamento do RNA)",
+            "Genes que compartilham o mesmo promotor sem interrupção de bases",
+            "Cístrons sequenciais regulados por um único operador proximal",
+            "Sequências de DNA que codificam simultaneamente duas extremidades 5' de poli-A"
+          ],
+          answer: 0,
+          explanation: "Em eucariotos, a unidade transcricional inicial contém íntrons que são removidos e éxons que são retidos na montagem do RNA mensageiro maduro[cite: 2]."
+        },
+        {
+          q: "Quais modificações moleculares essenciais transformam o pré-mRNA eucariótico em mRNA maduro competente para tradução citoplasmática?",
+          options: [
+            "Adição do cap 5', clivagem e poliadenilação na extremidade 3' e splicing (remoção dos íntrons)",
+            "Empacotamento em octâmeros de histonas e transposição de retrovírus",
+            "Ligação a plasmídeos circulares e oxidação mitocondrial",
+            "Fosforilação direta da guanina por DNA polimerases"
+          ],
+          answer: 0,
+          explanation: "O transcrito primário passa por capping na ponta 5', splicing para excisar íntrons e adição de cauda poli-A na ponta 3' antes de ser exportado para o citoplasma[cite: 2]."
+        },
+        {
+          q: "Comparando a arquitetura básica dos genes procarióticos e eucarióticos:",
+          options: [
+            "Procariotos possuem íntrons longos e eucariotos possuem arranjos exclusivos em operons",
+            "Procariotos apresentam colinearidade contínua e mRNAs policistrônicos; eucariotos têm íntrons, promotores monocistrônicos e modificações no mRNA",
+            "Ambos dependem obrigatoriamente de TATA boxes e fatores basais com enhancer distal",
+            "Genes de procariotos sofrem splicing alternativo com auxílio do spliceossomo"
+          ],
+          answer: 1,
+          explanation: "Genes procarióticos são contínuos (colineares com a proteína) e operam em operons; genes eucarióticos são interrompidos por íntrons, transcritos individualmente e requerem processamento complexo[cite: 2]."
+        },
+        {
+          q: "Qual é o principal impacto biológico do splicing alternativo no proteoma eucariótico?",
+          visual: 'splicing',
+          caption: 'Geração de diferentes variantes a partir de um único gene',
+          options: [
+            "Garante que cada gene produza rigidamente apenas uma única conformação proteica",
+            "Permite que um mesmo transcrito primário gere múltiplos mRNAs maduros e isoformas proteicas distintas, superando o número de genes",
+            "Inibe a tradução dos ribossomos no retículo endoplasmático rugoso",
+            "Converte DNA não codificante em pseudogenes funcionais por mutagênese"
+          ],
+          answer: 1,
+          explanation: "Ao combinar diferentes combinações de éxons, o splicing alternativo possibilita que uma espécie codifique centenas de milhares de isoformas a partir de um número limitado de genes[cite: 2]."
+        },
+        {
+          q: "Como se organizam os genes de histonas e de rRNAs classificados como 'repetições codificantes em tandem'?",
+          options: [
+            "Como sequências repetidas em blocos contíguos ordenados lado a lado no genoma, garantindo alta demanda transcricional",
+            "Como cópias dispersas exclusivamente no interior de plasmídeos extracromossômicos",
+            "Como pseudogenes truncados sem capacidade de ligação a promotores",
+            "Como sequências invertidas que atuam como elementos transponíveis autônomos"
+          ],
+          answer: 0,
+          explanation: "Genes de histonas e rRNAs organizam-se em arranjos contíguos repetidos em tandem para suprir a alta demanda de produtos requerida pela célula durante a divisão[cite: 2]."
+        },
+        {
+          q: "Como se diferenciam os microssatélites, minissatélites e macrossatélites pelo tamanho de sua unidade repetitiva?",
+          options: [
+            "Microssatélites: 1-9 pb; Minissatélites: 10-100 pb; Macrossatélites: > 100 pb",
+            "Microssatélites: > 1000 pb; Minissatélites: 500 pb; Macrossatélites: 2 pb",
+            "Microssatélites: éxons codificantes; Minissatélites: íntrons; Macrossatélites: promotores",
+            "Não há diferença estrutural além do teor estrito de pares de base G-C"
+          ],
+          answer: 0,
+          explanation: "DNA satélite classifica-se pelo tamanho do bloco repetido em microssatélites (1 a 9 pb, ex: STRs), minissatélites (10 a 100 pb, ex: VNTRs) e macrossatélites (> 100 pb)[cite: 2]."
+        },
+        {
+          q: "O que fundamenta a elevada taxa de polimorfismo dos microssatélites e sua associação com patologias como as ataxias espinocerebelares?",
+          options: [
+            "A alta estabilidade mecânica que impede sua replicação pela polimerase",
+            "O escorregamento da polimerase (slippage) e crossing-over desigual gerando expansões instáveis de trincas repetidas",
+            "A excisão constante catalisada por enzimas de restrição bacterianas",
+            "A inserção obrigatória de bacteriófagos de fita simples no sítio de início da tradução"
+          ],
+          answer: 1,
+          explanation: "Repetições simples sofrem deslizamento replicativo e crossing-over desigual com frequência de mutação elevada (~10⁻³); quando ocorrem expansões anormais de trinucleotídeos, deflagram doenças neurodegenerativas[cite: 2]."
+        },
+        {
+          q: "Centrômeros e telômeros são regiões cromossômicas essenciais compostas predominantemente por DNA satélite não codificante. Quais são suas respectivas funções?",
+          options: [
+            "Ambos codificam as subunidades alfa e beta da hemoglobina humana",
+            "Centrômeros asseguram a segregação correta dos cromossomos na divisão; telômeros protegem as extremidades contra degradação e fusões",
+            "Centrômeros iniciam a transcrição e telômeros abrigam os fatores de splicing alternativo",
+            "Centrômeros duplicam o cromossomo mitocondrial e telômeros realizam a tradução cap-independente"
+          ],
+          answer: 1,
+          explanation: "Centrômeros servem de ancoragem ao cinetócoro para segregação meiótica/mitótica; telômeros preservam a estabilidade das pontas cromossômicas contra erosão[cite: 2]."
+        },
+        {
+          q: "No genoma humano, qual das opções descreve corretamente os retrotransposons sem repetições terminais longas (sem LTR)?",
+          visual: 'piechart',
+          caption: 'Composição de retrotransposons humanos',
+          options: [
+            "LINEs (longos, ~6-7 kb, 21% do genoma, codificam transcriptase reversa) e SINEs (curtos, 100-300 pb, 13% do genoma, não autônomos como Alu)",
+            "Exclusivamente bacteriófagos integrados que perfazem menos de 0,01% do total",
+            "Transposons de corte e cola que não utilizam qualquer intermediário de RNA",
+            "Éxons móveis que formam os canais de sódio e potássio"
+          ],
+          answer: 0,
+          explanation: "Retrotransposons sem LTR compõem mais de um terço do genoma humano: LINEs são elementos autônomos longos e SINEs são elementos curtos dependentes da maquinaria enzimática dos LINEs[cite: 2]."
+        },
+        {
+          q: "O que a preservação de blocos sintênicos entre genomas de espécies divergentes (ex.: esponjas, medusas e vertebrados) demonstra?",
+          options: [
+            "Que as espécies não sofreram mutações pontuais ao longo do tempo",
+            "A conservação da ordem e arranjo de grupos de genes ao longo dos cromossomos, atuando como marcador filogenético",
+            "A perda irreversível de íntrons em todas as linhagens metazoárias",
+            "A síntese artificial de ribossomos em laboratório"
+          ],
+          answer: 1,
+          explanation: "Sintenia é a conservação da ordem relativa de blocos de genes ao longo dos cromossomos entre espécies divergentes, permitindo reconstituir a arquitetura cromossômica de ancestrais comuns[cite: 2]."
+        },
+        {
+          q: "De acordo com a teoria endossimbiótica, de quais linhagens procarióticas derivaram as mitocôndrias e os cloroplastos, respectivamente?",
+          options: [
+            "Mitocôndrias de Archaea metanogênicas e cloroplastos de vírus gigantes de DNA",
+            "Mitocôndrias de Alphaproteobacteria e cloroplastos de Cyanobacteria ancestrais",
+            "Ambas surgiram exclusivamente de invaginações autogênicas da carioteca hospedeira",
+            "Mitocôndrias de fungos ascomicetos e cloroplastos de algas marrons"
+          ],
+          answer: 1,
+          explanation: "Evidências genômicas e bioquímicas mostram que mitocôndrias evoluíram a partir de α-proteobactérias engolfadas e os plastídeos a partir de cianobactérias fotossintetizantes[cite: 2]."
+        },
+        {
+          q: "Quais são as características moleculares típicas compartilhadas pelos genomas de mitocôndrias e cloroplastos?",
+          options: [
+            "Genomas lineares altamente condensados com histonas nucleares em octâmeros",
+            "DNA fita dupla, em geral circular, ausência ou raridade de íntrons, organização em operons e múltiplas cópias por organela",
+            "Presença constante de cap 5' e caudas poli-A em todos os seus transcritos",
+            "Ausência completa de genes para rRNA ou síntese proteica própria"
+          ],
+          answer: 1,
+          explanation: "Organelas conservam traços do genoma bacteriano original: DNA circular fita dupla, cópias múltiplas por organela, ausência de histonas, organização em operons e genomas compactos[cite: 2]."
+        },
+        {
+          q: "Qual é a extensão e o conteúdo gênico do genoma mitocondrial humano (mtDNA)?",
+          visual: 'mtdna',
+          caption: 'Genoma mitocondrial humano circular',
+          options: [
+            "Cerca de 3,2 bilhões de pares de bases distribuídos em 23 cromossomos lineares",
+            "16.569 pares de bases, codificando 13 polipeptídeos da cadeia respiratória, 22 tRNAs e 2 rRNAs",
+            "50.000 pb com dezenas de operons de resistência a antimicrobianos",
+            "Exclusivamente 3 genes de histonas e regiões teloméricas"
+          ],
+          answer: 1,
+          explanation: "O mtDNA humano possui 16.569 pb e codifica 37 genes essenciais: 13 proteínas de fosforilação oxidativa, 22 tRNAs e 2 rRNAs (12S e 16S)[cite: 2]."
+        },
+        {
+          q: "Como se definem os conceitos de 'herança materna' e 'heteroplasmia' no contexto mitocondrial?",
+          options: [
+            "Herança materna refere-se à transmissão exclusiva de genes nucleares; heteroplasmia à mutação dos centrômeros",
+            "O mtDNA é transmitido predominantemente pela linhagem materna; a heteroplasmia é a coexistência de variantes normais e mutadas de mtDNA na mesma célula",
+            "Heteroplasmia é a presença de ribossomos bacterianos no retículo endoplasmático",
+            "Ambos os conceitos aplicam-se estritamente à segregação mendeliana de genes autossômicos"
+          ],
+          answer: 1,
+          explanation: "Em mamíferos, as mitocôndrias são herdadas quase que exclusivamente via oócito materno; heteroplasmia é o estado onde moléculas de mtDNA selvagens e mutantes coexistem na célula[cite: 2]."
+        },
+        {
+          q: "Como a biologia molecular define um vírus?",
+          options: [
+            "Uma célula acelular independente capaz de produzir ATP por fosforilação oxidativa autônoma",
+            "Um agente infeccioso acelular que só se multiplica no interior de células vivas, utilizando a maquinaria de síntese do hospedeiro",
+            "Um organismo eucarioto microscópico que possui apenas ribossomos livres",
+            "Uma bactéria filamentosa que perdeu a parede celular de peptideoglicano"
+          ],
+          answer: 1,
+          explanation: "Vírus são parasitas intracelulares obrigatórios destituídos de metabolismo energético próprio, necessitando da maquinaria celular hospedeira para replicação[cite: 2]."
+        },
+        {
+          q: "Quais são os componentes estruturais básicos presentes em uma partícula viral completa (vírion)?",
+          visual: 'virion',
+          caption: 'Arquitetura geral de um vírion',
+          options: [
+            "Uma parede de celulose e grânulos de glicogênio citoplasmático",
+            "O genoma de ácido nucleico envolvido por um capsídeo proteico (nucleocapsídeo), às vezes envolto por um envelope lipoproteico",
+            "Cromatina condensada com octâmeros de histonas e mitocôndrias anexas",
+            "Plasmídeos extracelulares dotados de pili de conjugação"
+          ],
+          answer: 1,
+          explanation: "O vírion básico compreende o ácido nucleico (DNA ou RNA) contido em um capsídeo proteico (nucleocapsídeo), podendo possuir ou não um envelope lipídico membranoso associado[cite: 2]."
+        },
+        {
+          q: "Em relação à natureza de seu material genético, por que os vírus exibem a maior diversidade molecular da biosfera?",
+          options: [
+            "Porque utilizam obrigatoriamente cadeias mistas compostas igualmente de DNA, RNA e aminoácidos",
+            "Podem apresentar genomas de DNA ou RNA, de fita simples ou dupla, lineares, circulares ou segmentados, com polaridade positiva ou negativa",
+            "Porque todos os vírus possuem cromossomos homólogos diploides organizados em telômeros",
+            "Seus genomas contêm necessariamente mais de 100 bilhões de pares de bases"
+          ],
+          answer: 1,
+          explanation: "A diversidade estrutural viral é única: inclui DNA ou RNA de fita simples (ss) ou dupla (ds), conformação linear, circular ou dividida em segmentos autônomos, em sentido positivo ou negativo[cite: 2]."
+        },
+        {
+          q: "Qual é a distinção biológica essencial entre o ciclo lítico e o ciclo lisogênico de um bacteriófago?",
+          options: [
+            "No ciclo lítico há lise e morte celular para liberar viriões; no lisogênico, o DNA viral integra-se ao cromossomo hospedeiro como prófago e replica com ele",
+            "No ciclo lítico o genoma viral torna-se um plasmídeo benéfico; no lisogênico a célula é imediatamente destruída",
+            "No ciclo lisogênico ocorre transcrição reversa contínua no interior de lisossomos",
+            "Ambos os ciclos provocam a destruição imediata da bactéria infectada em menos de um minuto"
+          ],
+          answer: 0,
+          explanation: "No ciclo lítico, o vírus sequestra a célula, replica-se e promove a sua lise[cite: 2]. No ciclo lisogênico, o genoma viral integra-se silenciosamente ao nucleoide como prófago, multiplicando-se a cada divisão bacteriana[cite: 2]."
+        },
+        {
+          q: "Por que os vírus com genoma de RNA acumulam mutações e evoluem com taxa significativamente mais rápida que os vírus de DNA?",
+          options: [
+            "Porque são alvos primários de enzimas de restrição bacterianas",
+            "Pela alta taxa de erro e ausência de atividade de revisão (proofreading) das RNA polimerases dependentes de RNA aliada à segmentação genômica",
+            "Porque seus capsídeos lipídicos se fundem espontaneamente com o genoma do hospedeiro",
+            "Devido à ação imediata do complexo spliceossomo nuclear em seus íntrons"
+          ],
+          answer: 1,
+          explanation: "As RNA polimerases virais não possuem mecanismos eficientes de correção de leitura (proofreading), o que gera taxas de erro de até 10⁻⁴ a 10⁻⁵ por base, acelerando rearranjos e evolução de novas linhagens[cite: 2]."
+        },
+        {
+          q: "Dois genomas eucarióticos têm o MESMO tamanho (~2 Gb) e número de genes semelhante, mas o Genoma X tem 25% de DNA não codificante e o Genoma Y tem 75%. O que se espera da densidade gênica?",
+          options: [
+            "A densidade é idêntica, pois depende apenas do tamanho total do genoma",
+            "O Genoma Y tem MAIOR densidade, porque o DNA não codificante também codifica proteínas",
+            "O Genoma Y tem MENOR densidade gênica: o mesmo número de genes está diluído em mais DNA não codificante",
+            "O Genoma X tem menor densidade, pois menos DNA repetitivo significa menos genes"
+          ],
+          answer: 2,
+          explanation: "Com a mesma quantidade de genes distribuída em mais espaço preenchido por sequências não codificantes (75%), a densidade gênica do Genoma Y é significativamente menor[cite: 2]."
+        },
+        {
+          q: "Um estudante compara três genomas: uma bactéria, o núcleo de uma célula humana e a mitocôndria dessa mesma célula. Qual alternativa está correta?",
+          options: [
+            "A mitocôndria tem genoma pequeno e circular lembrando um procarioto",
+            "O genoma nuclear humano é circular e haploide, como o bacteriano",
+            "A bactéria tem genoma linear e rico em íntrons, ao contrário do núcleo humano",
+            "A mitocôndria é diploide e rica em DNA repetitivo, como o núcleo"
+          ],
+          answer: 0,
+          explanation: "Devido à sua ascendência endossimbiótica a partir de alfa-proteobactérias, a mitocôndria mantém um cromossomo circular fita dupla pequeno, compacto e semelhante ao bacteriano[cite: 2]."
+        },
+        {
+          q: "As globinas α e β humanas surgiram por duplicação de um gene ancestral seguida de divergência. A globina α humana e a globina α de camundongo divergiram por especiação. Como se classificam, respectivamente, esses dois pares?",
+          visual: 'homology',
+          caption: 'Classificação evolutiva de homólogos',
+          options: [
+            "Parálogos; ortólogos",
+            "Ortólogos; parálogos",
+            "Pseudogenes; ortólogos",
+            "Parálogos; xenólogos"
+          ],
+          answer: 0,
+          explanation: "Genes resultantes de duplicação gênica interna são parálogos (globina α e β); genes resultantes de divergência direta por especiação mantendo a função são ortólogos (α humana e α murina)[cite: 2]."
         }
       ],
 
       ferramentas: [
-        // 1. O caminho de um projeto de sequenciamento
         {
           q: "Qual é a sequência lógica e encadeada de etapas obrigatórias em um projeto de sequenciamento de DNA?",
           visual: 'workflow',
@@ -734,8 +1533,6 @@
           answer: 1,
           explanation: "Como enfatizado na aula, nenhuma etapa compensa a falha da anterior ('dado ruim na entrada é dado ruim na saída'); o fluxo parte da extração pura, preparo da biblioteca com adaptadores, corrida na máquina, controle de qualidade dos dados brutos e montagem in silico[cite: 3]."
         },
-
-        // 2. Avaliando o eletroferograma
         {
           q: "Ao inspecionar visualmente um eletroferograma gerado por sequenciamento de Sanger, como se reconhece um trecho de EXCELENTE qualidade?",
           visual: 'electropherogram',
@@ -749,8 +1546,6 @@
           answer: 1,
           explanation: "Um eletroferograma confiável exibe picos nítidos, altos e isolados com espaçamento regular entre bases vizinhas e ausência de ruído residual de fundo na linha de base[cite: 3]."
         },
-
-        // 3. Vantagens e desvantagens de Sanger
         {
           q: "Em relação ao método clássico de Sanger (primeira geração), quais são suas principais vantagens e desvantagens?",
           options: [
@@ -762,8 +1557,6 @@
           answer: 1,
           explanation: "O Sanger continua sendo o padrão ouro em confiabilidade analítica e resolução de amplicons pontuais (~500-900 pb), mas possui rendimento reduzido (máximo 96 amostras simultâneas em capilares) e custo proibitivo para montagens de genomas inteiros[cite: 3]."
         },
-
-        // 4. Sequenciamento de alto desempenho (segunda geração)
         {
           q: "Qual transformação fundamental marcou a transição da primeira geração (Sanger) para o sequenciamento de segunda geração (NGS)?",
           options: [
@@ -775,8 +1568,6 @@
           answer: 1,
           explanation: "A segunda geração (NGS) revolucionou a área ao paralelizar a reação: fragmenta o genoma e sequencia milhões a bilhões de leituras clonais simultaneamente na mesma corrida, derrubando o custo por megabase[cite: 3]."
         },
-
-        // 5. Single-end vs Paired-end
         {
           q: "Qual é a diferença operacional e analítica entre leituras Single-End e Paired-End em sequenciadores NGS?",
           visual: 'pairedend',
@@ -790,8 +1581,6 @@
           answer: 1,
           explanation: "No sequenciamento Paired-End, ambas as pontas do mesmo fragmento de DNA são sequenciadas gerando dois reads; a distância física conhecida entre eles permite ancorar sequências sobre regiões repetitivas e resolver variações estruturais[cite: 3]."
         },
-
-        // 6. Roche 454 (Pirosequenciamento)
         {
           q: "A plataforma Roche 454 foi a pioneira da segunda geração. Qual é a sua base química e qual era sua maior desvantagem?",
           visual: 'pyro',
@@ -805,8 +1594,6 @@
           answer: 1,
           explanation: "O 454 detectava a luz emitida pela luciferase após a liberação de pirofosfato (PPi); em trechos homopoliméricos (ex.: AAAAA), a incorporação simultânea perde a proporcionalidade linear luminosa a partir da 4ª ou 5ª base, gerando erros frequentes de inserção/deleção[cite: 3]."
         },
-
-        // 7. Ion Torrent (Chip/Sinal de pH)
         {
           q: "A tecnologia Ion Torrent emprega chips semicondutores para sequenciamento. Como funciona a detecção do sinal e qual sua principal limitação?",
           visual: 'iontorrent',
@@ -820,8 +1607,6 @@
           answer: 1,
           explanation: "A tecnologia semicondutora do Ion Torrent mede diretamente o pulso elétrico gerado pela queda de pH (liberação de H⁺) nos micropoços a cada incorporação[cite: 3]. Por ofertar um dNTP por vez sem bloqueador, também padece com homopolímeros longos[cite: 3]."
         },
-
-        // 8. Flow cell e queda de qualidade na leitura (Illumina)
         {
           q: "Em corridas na plataforma Illumina, por que tipicamente observa-se uma queda progressiva do valor Phred (Q) em direção à extremidade final (3') das leituras?",
           options: [
@@ -833,8 +1618,6 @@
           answer: 1,
           explanation: "A queda de qualidade ao longo da leitura ocorre porque as milhares de moléculas em cada cluster perdem a sincronia perfeita de incorporação (algumas atrasam ou adiantam), acumulando ruído de fundo que confunde o sensor ótico nos ciclos finais[cite: 3]."
         },
-
-        // 9. Vantagens e desvantagens da Illumina
         {
           q: "Quais são as principais vantagens e desvantagens consolidadas da plataforma Illumina?",
           options: [
@@ -846,8 +1629,6 @@
           answer: 1,
           explanation: "A Illumina domina o mercado pelo imenso rendimento em gigabases e precisão nas chamadas de bases individuais, mas sofre limitações em regiões ricas em GC e suas leituras curtas (50-300 pb) têm dificuldade para transpor regiões repetitivas complexas na montagem[cite: 3]."
         },
-
-        // 10. Terceira Geração de sequenciamento
         {
           q: "Qual é a marca distintiva conceitual da Terceira Geração de sequenciamento em relação às tecnologias de segunda geração (NGS)?",
           options: [
@@ -859,8 +1640,6 @@
           answer: 1,
           explanation: "A terceira geração é caracterizada pelo sequenciamento de molécula única em tempo real (sem amplificação por PCR, eliminando seus vieses) e pela capacidade de produzir leituras muito longas (dezenas a centenas de kilobases)[cite: 3]."
         },
-
-        // 11. PacBio SMRT (Vantagens e Desvantagens)
         {
           q: "A tecnologia Pacific Biosciences (PacBio SMRT) utiliza guias de onda em modo zero (ZMW). Quais são suas principais vantagens e desvantagens?",
           options: [
@@ -872,8 +1651,6 @@
           answer: 0,
           explanation: "PacBio destaca-se por leituras longas (15-25 kb) que resolvem regiões repetitivas e revelam marcas epigenéticas pela velocidade de incorporação da polimerase, tendo como contrapontos o alto investimento em instrumentação/reagentes e taxa de erro em corridas contínuas simples corrigida pelo modo circular HiFi[cite: 3]."
         },
-
-        // 12. Oxford Nanopore (Vantagens e Desvantagens)
         {
           q: "A plataforma Oxford Nanopore (como o MinION) fundamenta-se na leitura física do DNA através de poros. Quais são suas vantagens e desvantagens mais marcantes?",
           visual: 'nanopore',
@@ -887,8 +1664,6 @@
           answer: 1,
           explanation: "O Nanopore permite sequenciamento direto no campo em tempo real via portas USB com leituras que podem ultrapassar megabases de comprimento, mas possui uma taxa de erro bruta por base superior às plataformas de síntese e flow cells com tempo de vida útil limitado[cite: 3]."
         },
-
-        // Questões Clássicas e Slido Mantidas
         {
           q: "Qual é o princípio bioquímico fundamental responsável pela interrupção da síntese da cadeia polinucleotídica no sequenciamento de Sanger?",
           visual: 'ddntp',
@@ -995,6 +1770,72 @@
           ],
           answer: 1,
           explanation: "Quanto maior o N50 e menor o L50, mais contígua e menos fragmentada é a montagem[cite: 3]; associado a um percentual de BUSCO superior (96% vs 72%), a montagem X é claramente superior tanto em continuidade física quanto em integridade gênica[cite: 3]."
+        },
+        {
+          q: "Sobre o fluxo de um projeto de sequenciamento e seus conceitos, assinale a afirmação correta:",
+          options: [
+            "O controle de qualidade ocorre antes da extração do DNA, para decidir se vale sequenciar",
+            "Um 'read' corresponde ao genoma inteiro já montado, e a biblioteca é o produto da anotação",
+            "A montagem acontece antes do sequenciamento, orientando quais fragmentos gerar",
+            "A 'biblioteca' é o conjunto de fragmentos com adaptadores prontos para o sequenciamento"
+          ],
+          answer: 3,
+          explanation: "Uma biblioteca de sequenciamento consiste na coleção de fragmentos de DNA (ou cDNA) de tamanho selecionado com adaptadores moleculares específicos ligados nas duas extremidades para ancoragem e priming na plataforma[cite: 3]."
+        },
+        {
+          q: "Em uma leitura de sequenciamento, a base na posição 20 tem score Phred Q = 30 e a base na extremidade final (posição 150) tem Q = 13. Qual afirmação está correta?",
+          options: [
+            "A queda ocorre porque a DNA polimerase se esgota completamente já no primeiro ciclo de síntese",
+            "A base Q13 é mais confiável, pois valores menores de Q indicam menor probabilidade de erro",
+            "As duas bases têm a mesma confiabilidade, pois o Phred não depende da posição na leitura",
+            "A base Q30 é mais confiável (P ≈ 0,001) que a Q13 (P ≈ 0,05), sendo típica a queda de Q na extremidade da leitura"
+          ],
+          answer: 3,
+          explanation: "Q30 indica 99,9% de acurácia (P=0,001), enquanto Q13 corresponde a ~95% (P≈0,05)[cite: 3]. Em plataformas como Illumina, a qualidade cai progressivamente em direção à extremidade 3' devido à perda de sincronia (phasing) e decaimento de sinal[cite: 3]."
+        },
+        {
+          q: "Qual é a diferença funcional entre o ddNTP do método de Sanger e o terminador utilizado no sequenciamento empregado na plataforma Illumina?",
+          options: [
+            "O ddNTP para a síntese de forma DEFINITIVA; o terminador da Illumina bloqueia o 3' de forma REVERSÍVEL, sendo clivado a cada ciclo",
+            "Ambos param a síntese definitivamente, diferindo apenas no suporte físico (capilar vs flow cell)",
+            "O ddNTP é reversível e o terminador da Illumina é definitivo — o oposto do observado",
+            "O terminador da Illumina não tem fluoróforo e depende de prótons H+ para gerar sinal"
+          ],
+          answer: 0,
+          explanation: "No método de Sanger o ddNTP carece irreversivelmente do 3'-OH gerando terminação final[cite: 3]; na Illumina, o nucleotídeo possui um grupo bloqueador 3' e fluoróforo que são clivados quimicamente após a captura da imagem para permitir o ciclo seguinte[cite: 3]."
+        },
+        {
+          q: "Deseja-se sequenciar um genoma repleto de elementos de transposição recentes e famílias gênicas em tandem muito parecidas. Qual estratégia de sequenciamento seria mais adequada?",
+          options: [
+            "Apenas short reads de 50 pb em baixa cobertura (5x), pois bastam para atravessar qualquer repetição",
+            "Sanger de uma biblioteca de cDNA, dispensando o DNA genômico",
+            "Somente aumentar a cobertura de short reads para 200x, o que elimina a ambiguidade das repetições",
+            "Leituras longas (long reads), atravessando as repetições"
+          ],
+          answer: 3,
+          explanation: "Leituras curtas mapeiam de forma ambígua em regiões idênticas repetidas, quebrando a montagem em pequenos contigs[cite: 3]; leituras longas (PacBio HiFi ou Nanopore) conseguem cobrir a repetição e ancorar em regiões flanqueadoras únicas[cite: 3]."
+        },
+        {
+          q: "Uma equipe sequenciou uma bactéria SEM genoma de referência próximo disponível e quer descobrir novos genes e grandes rearranjos cromossômicos. Qual estratégia é adequada?",
+          options: [
+            "Montagem de novo, pois não depende de referência e revela novidades",
+            "Montagem por referência contra qualquer bactéria, pois é sempre mais precisa que a de novo",
+            "Montagem de novo, mas ela é incapaz de detectar variantes estruturais",
+            "Nenhuma montagem é necessária: os reads já constituem o genoma completo"
+          ],
+          answer: 0,
+          explanation: "A montagem por referência impõe um 'viés de molde', forçando os reads a se alinharem a um modelo preexistente e mascarando rearranjos inéditos[cite: 3]; a montagem de novo reconstrói o genoma a partir da sobreposição das leituras sem qualquer viés[cite: 3]."
+        },
+        {
+          q: "Dois sequenciamentos do mesmo genoma bacteriano apresentaram profundidades diferentes: amostra P (60x) e amostra Q (8x). O que se espera da montagem de novo da amostra Q em relação à P?",
+          options: [
+            "A amostra Q terá montagem melhor, pois menos reads reduzem o ruído",
+            "A amostra Q terá cobertura irregular, mais lacunas e contigs mais curtos",
+            "As duas montagens serão idênticas, pois a cobertura não afeta a contiguidade",
+            "A amostra Q terá maior N50, porque baixa cobertura força contigs mais longos"
+          ],
+          answer: 1,
+          explanation: "Uma cobertura de apenas 8x é insuficiente para montagem de novo de genomas (o recomendado é 50-100x)[cite: 3]; regiões do genoma deixarão de ser amostradas aleatoriamente, gerando quebras no grafo de montagem, lacunas (gaps) e contigs muito curtos[cite: 3]."
         }
       ]
     };
